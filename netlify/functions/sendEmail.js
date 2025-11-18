@@ -1,117 +1,106 @@
-// netlify/functions/sendEmail.js
-// Backend para enviar emails com anexos usando Resend
-// Totalmente compatível com seu HTML e seu frontend atualizado.
+exports.handler = async (event) => {
+  try {
+    console.log("Método recebido:", event.httpMethod);
 
-const RESEND_API_URL = "https://api.resend.com/emails";
-
-exports.handler = async function (event, context) {
+    // Só aceita POST
     if (event.httpMethod !== "POST") {
-        return { statusCode: 405, body: "Method Not Allowed" };
+      return {
+        statusCode: 405,
+        body: JSON.stringify({ error: "Method Not Allowed" }),
+      };
     }
 
+    // Variáveis de ambiente
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const EMAIL_TO = process.env.EMAIL_TO;
+    const SENDER_EMAIL = process.env.SENDER_EMAIL || "onboarding@resend.dev";
+
+    console.log("RESEND_API_KEY existe?", !!RESEND_API_KEY);
+    console.log("EMAIL_TO:", EMAIL_TO);
+    console.log("SENDER_EMAIL:", SENDER_EMAIL);
+
+    // Se faltar qualquer variável → erro claro
+    if (!RESEND_API_KEY || !EMAIL_TO || !SENDER_EMAIL) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: "Missing environment variables.",
+          RESEND_API_KEY: !!RESEND_API_KEY,
+          EMAIL_TO,
+          SENDER_EMAIL,
+        }),
+      };
+    }
+
+    // Tentar ler o body
+    let bodyData;
     try {
-        const body = JSON.parse(event.body);
-
-        const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const EMAIL_TO = process.env.EMAIL_TO; // seu hotmail
-        const SENDER_EMAIL = process.env.SENDER_EMAIL || "no-reply@hcprojetos.net.br";
-
-        if (!RESEND_API_KEY || !EMAIL_TO) {
-            return {
-                statusCode: 500,
-                body: JSON.stringify({
-                    error: "Faltando RESEND_API_KEY ou EMAIL_TO nas variáveis de ambiente."
-                })
-            };
-        }
-
-        // Campos vindos do frontend
-        const {
-            name,
-            whatsapp,
-            email,
-            details,
-            estilo,
-            ambientes,
-            respostas_quiz,
-            attachments
-        } = body;
-
-        // Criar HTML do email
-        let html = `
-            <h2>Novo Pedido de Projeto</h2>
-
-            <h3>Estilo recomendado:</h3>
-            <p><strong>${estilo || "-"}</strong></p>
-
-            <h3>Ambientes selecionados:</h3>
-            <p>${(ambientes && ambientes.length) ? ambientes.join(", ") : "-"}</p>
-
-            <h3>Dados do cliente:</h3>
-            <p><strong>Nome:</strong> ${name}</p>
-            <p><strong>WhatsApp:</strong> ${whatsapp}</p>
-            <p><strong>E-mail:</strong> ${email}</p>
-
-            <h3>Respostas do Quiz</h3>
-            <ol>
-        `;
-
-        respostas_quiz.forEach(q => {
-            html += `<li><strong>${q.question}:</strong> ${q.answer}</li>`;
-        });
-
-        html += `
-            </ol>
-
-            <h3>Detalhes adicionais:</h3>
-            <p>${details ? details.replace(/\n/g, "<br>") : "-"}</p>
-
-            <h3>Anexos:</h3>
-            <p>${attachments.length} arquivo(s) enviado(s).</p>
-        `;
-
-        // Preparar anexos para o Resend
-        const resendAttachments = attachments.map(att => ({
-            name: att.filename,
-            data: att.base64,
-            type: att.contentType || "application/octet-stream"
-        }));
-
-        // Payload da API do Resend
-        const payload = {
-            from: SENDER_EMAIL,
-            to: [EMAIL_TO],
-            subject: `Novo pedido — ${estilo} — ${ambientes.join(", ")}`,
-            html,
-            attachments: resendAttachments
-        };
-
-        const response = await fetch(RESEND_API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${RESEND_API_KEY}`
-            },
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            const text = await response.text();
-            return {
-                statusCode: 500,
-                body: JSON.stringify({ error: "Erro Resend", detail: text })
-            };
-        }
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ ok: true })
-        };
-
+      bodyData = JSON.parse(event.body);
     } catch (err) {
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: err.message })
-        };
+      console.log("JSON inválido:", err);
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Invalid JSON body" }),
+      };
     }
+
+    const { name, email, phone, message, attachments } = bodyData;
+
+    console.log("Dados recebidos:", bodyData);
+
+    // Body da Resend
+    const emailData = {
+      from: SENDER_EMAIL,
+      to: EMAIL_TO,
+      subject: `Novo contato de ${name}`,
+      html: `
+        <h2>Novo contato recebido</h2>
+        <p><b>Nome:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Telefone:</b> ${phone}</p>
+        <p><b>Mensagem:</b> ${message}</p>
+      `,
+    };
+
+    // Enviar para a Resend API
+    console.log("Enviando email via Resend...");
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify(emailData),
+    });
+
+    const result = await response.text();
+
+    console.log("Resposta da Resend:", result);
+
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({
+          error: "Erro do Resend",
+          details: result,
+        }),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ success: true, resendResponse: result }),
+    };
+
+  } catch (error) {
+    console.log("ERRO GERAL:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: "Internal Server Error",
+        details: error.message,
+      }),
+    };
+  }
 };
