@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubra Seu Estilo de Marcenaria Inteligente</title>
+    <style>
+        :root {
+            --azul-marinho: #003366;
+            --laranja: #FF6600;
+            --laranja-escuro: #CC5200;
+            --branco: #FFFFFF;
+            --cinza-claro: #f4f7f6;
+            --cinza: #666666;
+            --border-radius: 8px;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--branco);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 95vw;
+            width: 800px;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background-color: var(--azul-marinho);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--laranja);
+        }
+
+        .logo {
+            color: var(--laranja);
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: var(--branco);
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .quiz-screen {
+            padding: 25px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+            color: var(--azul-marinho);
+        }
+
+        .quiz-screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2, h3 {
+            color: var(--azul-marinho);
+            margin-bottom: 15px;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--cinza);
+        }
+
+        button {
+            background-color: var(--laranja);
+            color: var(--branco);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: var(--laranja-escuro);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.btn-secondary {
+            background-color: var(--azul-marinho);
+            margin-left: 10px;
+        }
+
+        button.btn-secondary:hover {
+            background-color: #002244;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--branco);
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            min-height: 150px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .option-btn:hover, .option-btn.selected {
+            border-color: var(--laranja);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .option-btn img {
+            max-width: 100%;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .option-btn span {
+            color: var(--azul-marinho);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--laranja);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--cinza);
+            margin-bottom: 5px;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Seleção de Ambientes */
+        .ambientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .ambiente-btn {
+            background-color: var(--branco);
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: bold;
+            color: var(--azul-marinho);
+        }
+
+        .ambiente-btn:hover, .ambiente-btn.selected {
+            border-color: var(--laranja);
+            background-color: rgba(255, 102, 0, 0.1);
+        }
+
+        .resumo-pedido {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+            border-left: 4px solid var(--laranja);
+            display: none;
+        }
+
+        .resumo-pedido.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .preco-original {
+            text-decoration: line-through;
+            color: var(--cinza);
+        }
+
+        .preco-promocional {
+            color: var(--laranja);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .economia {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        /* Formulário de Contato */
+        #contactForm form {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        #contactForm label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--azul-marinho);
+        }
+
+        #contactForm input[type="text"],
+        #contactForm input[type="tel"],
+        #contactForm input[type="email"],
+        #contactForm textarea,
+        #contactForm input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+        }
+
+        #contactForm textarea {
+            resize: vertical;
+        }
+
+        #contactForm button[type="submit"] {
+            margin-top: 20px;
+        }
+
+        .small-text {
+            font-size: 0.8em;
+            color: var(--cinza);
+            margin-top: 10px;
+        }
+
+        .checkbox-termos {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .checkbox-termos input {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        
+        /* Loader de IA */
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--laranja);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            margin: 30px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Página de Agradecimento */
+        .agradecimento {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .links-pagamento {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .link-pagamento {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .link-pagamento:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--laranja);
+        }
+
+        .link-pagamento h3 {
+            color: var(--azul-marinho);
+            margin-bottom: 10px;
+        }
+
+        .link-pagamento .preco {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--laranja);
+            margin: 10px 0;
+        }
+
+        .link-pagamento .desconto {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+            border-top: 3px solid var(--laranja);
+        }
+
+        .footer p {
+            color: var(--branco);
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries para Tablets e Desktops */
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+            
+            .ambientes-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+            
+            .resumo-pedido {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header">
+            <div class="logo">SUA MARCA</div>
+            <div class="tagline">Marcenaria Inteligente e Personalizada</div>
+        </div>
+        
+        <div id="welcomeScreen" class="quiz-screen active">
+            <h1>Descubra Seu Estilo de Marcenaria!</h1>
+            <p>Responda 5 perguntas rápidas e visuais para encontrar o design perfeito para o seu móvel.</p>
+            <button onclick="startQuiz()">Começar o Teste Visual</button>
+        </div>
+
+        <!-- Pergunta 1 -->
+        <div id="question1" class="quiz-screen">
+            <div class="progress-text">Pergunta 1 de 5</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 20%"></div>
+            </div>
+            <h2>1. Qual puxador te chama mais atenção?</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-style="escandinavo">
+                    <img src="https://via.placeholder.com/150x100/4CAF50/FFFFFF?text=Couro" alt="Puxador de Couro">
+                    <span>A. Couro Discreto</span>
+                </button>
+                <button class="option-btn" data-style="industrial">
+                    <img src="https://via.placeholder.com/150x100/607D8B/FFFFFF?text=Metal" alt="Puxador Metálico Aparente">
+                    <span>B. Metal Aparente</span>
+                </button>
+                <button class="option-btn" data-style="laca">
+                    <img src="https://via.placeholder.com/150x100/9C27B0/FFFFFF?text=Cava" alt="Puxador Cava Embutido">
+                    <span>C. Cava Embutida</span>
+                </button>
+                <button class="option-btn" data-style="rustico">
+                    <img src="https://via.placeholder.com/150x100/795548/FFFFFF?text=Ferro" alt="Puxador de Ferro Envelhecido">
+                    <span>D. Ferro Envelhecido</span>
+                </button>
+                <button class="option-btn" data-style="geometrico">
+                    <img src="https://via.placeholder.com/150x100/2196F3/FFFFFF?text=Perfil" alt="Puxador de Perfil Reto">
+                    <span>E. Perfil Fino</span>
+                </button>
+            </div>
+            <div class="navigation">
+                <button onclick="showScreen('welcomeScreen')" class="btn-secondary">Voltar</button>
+                <button id="next1" onclick="nextQuestion(1)" disabled>Avançar</button>
+            </div>
+        </div>
+
+        <!-- Pergunta 2 -->
+        <div id="question2" class="quiz-screen">
+            <div class="progress-text">Pergunta 2 de 5</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 40%"></div>
+            </div>
+            <h2>2. Qual textura de painel você mais gosta?</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-style="escandinavo">
+                    <img src="https://via.placeholder.com/150x100/FFE0B2/333333?text=Madeira+Clara" alt="Madeira Clara Freijó">
+                    <span>A. Madeira Clara (Freijó)</span>
+                </button>
+                <button class="option-btn" data-style="industrial">
+                    <img src="https://via.placeholder.com/150x100/757575/FFFFFF?text=Cimento" alt="Cimento Queimado">
+                    <span>B. Cimento Queimado</span>
+                </button>
+                <button class="option-btn" data-style="laca">
+                    <img src="https://via.placeholder.com/150x100/CFD8DC/333333?text=Laca" alt="Laca Ultra-Fosca">
+                    <span>C. Laca Ultra-Fosca</span>
+                </button>
+                <button class="option-btn" data-style="rustico">
+                    <img src="https://via.placeholder.com/150x100/8D6E63/FFFFFF?text=Madeira+Rústica" alt="Madeira Rústica">
+                    <span>D. Madeira Rústica</span>
+                </button>
+                <button class="option-btn" data-style="geometrico">
+                    <img src="https://via.placeholder.com/150x100/E91E63/FFFFFF?text=MDF+Colorido" alt="MDF Liso Colorido">
+                    <span>E. MDF Liso Colorido</span>
+                </button>
+            </div>
+            <div class="navigation">
+                <button onclick="previousQuestion(2)" class="btn-secondary">Voltar</button>
+                <button id="next2" onclick="nextQuestion(2)" disabled>Avançar</button>
+            </div>
+        </div>
+
+        <!-- Pergunta 3 -->
+        <div id="question3" class="quiz-screen">
+            <div class="progress-text">Pergunta 3 de 5</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 60%"></div>
+            </div>
+            <h2>3. Que tipo de prateleira você escolheria?</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-style="escandinavo">
+                    <img src="https://via.placeholder.com/150x100/BBDEFB/333333?text=Flutuante" alt="Prateleira Flutuante Simples">
+                    <span>A. Flutuante Simples</span>
+                </button>
+                <button class="option-btn" data-style="industrial">
+                    <img src="https://via.placeholder.com/150x100/78909C/FFFFFF?text=Metal" alt="Estrutura de Metal">
+                    <span>B. Estrutura de Metal</span>
+                </button>
+                <button class="option-btn" data-style="laca">
+                    <img src="https://via.placeholder.com/150x100/ECEFF1/333333?text=Armários" alt="Armários Fechados">
+                    <span>C. Armários Fechados</span>
+                </button>
+                <button class="option-btn" data-style="rustico">
+                    <img src="https://via.placeholder.com/150x100/BCAAA4/333333?text=Vime" alt="Nichos com Vime">
+                    <span>D. Nichos com Vime</span>
+                </button>
+                <button class="option-btn" data-style="geometrico">
+                    <img src="https://via.placeholder.com/150x100/FF9800/FFFFFF?text=Nichos+Coloridos" alt="Nichos Coloridos">
+                    <span>E. Nichos Coloridos</span>
+                </button>
+            </div>
+            <div class="navigation">
+                <button onclick="previousQuestion(3)" class="btn-secondary">Voltar</button>
+                <button id="next3" onclick="nextQuestion(3)" disabled>Avançar</button>
+            </div>
+        </div>
+
+        <!-- Pergunta 4 -->
+        <div id="question4" class="quiz-screen">
+            <div class="progress-text">Pergunta 4 de 5</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 80%"></div>
+            </div>
+            <h2>4. Qual ambiente de cores te inspira mais?</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-style="escandinavo">
+                    <img src="https://via.placeholder.com/150x100/FAFAFA/333333?text=Claro+Arejado" alt="Cores claras e neutras">
+                    <span>A. Claro e Arejado</span>
+                </button>
+                <button class="option-btn" data-style="industrial">
+                    <img src="https://via.placeholder.com/150x100/424242/FFFFFF?text=Escuro+Arrojado" alt="Cores escuras e neutras">
+                    <span>B. Escuro e Arrojado</span>
+                </button>
+                <button class="option-btn" data-style="laca">
+                    <img src="https://via.placeholder.com/150x100/9E9E9E/FFFFFF?text=Elegante+Sutil" alt="Cores elegantes e sutis">
+                    <span>C. Elegante e Sutil</span>
+                </button>
+                <button class="option-btn" data-style="rustico">
+                    <img src="https://via.placeholder.com/150x100/8D6E63/FFFFFF?text=Terroso+Aconchegante" alt="Cores terrosas e quentes">
+                    <span>D. Terroso e Aconchegante</span>
+                </button>
+                <button class="option-btn" data-style="geometrico">
+                    <img src="https://via.placeholder.com/150x100/FF5722/FFFFFF?text=Vibrante+Dinâmico" alt="Cores vibrantes e dinâmicas">
+                    <span>E. Vibrante e Dinâmico</span>
+                </button>
+            </div>
+            <div class="navigation">
+                <button onclick="previousQuestion(4)" class="btn-secondary">Voltar</button>
+                <button id="next4" onclick="nextQuestion(4)" disabled>Avançar</button>
+            </div>
+        </div>
+
+        <!-- Pergunta 5 -->
+        <div id="question5" class="quiz-screen">
+            <div class="progress-text">Pergunta 5 de 5</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 100%"></div>
+            </div>
+            <h2>5. Como você prefere organizar seus objetos?</h2>
+            <div class="options-grid">
+                <button class="option-btn" data-style="escandinavo">
+                    <img src="https://via.placeholder.com/150x100/BBDEFB/333333?text=Prateleiras+Abertas" alt="Prateleiras Abertas">
+                    <span>A. Tudo visível e acessível</span>
+                </button>
+                <button class="option-btn" data-style="industrial">
+                    <img src="https://via.placeholder.com/150x100/78909C/FFFFFF?text=Estantes+Metálicas" alt="Estantes com Estrutura Metálica">
+                    <span>B. Misto de aberto e fechado</span>
+                </button>
+                <button class="option-btn" data-style="laca">
+                    <img src="https://via.placeholder.com/150x100/ECEFF1/333333?text=Armários+Fechados" alt="Tudo Guardado">
+                    <span>C. Tudo organizado atrás de portas</span>
+                </button>
+                <button class="option-btn" data-style="rustico">
+                    <img src="https://via.placeholder.com/150x100/8D6E63/FFFFFF?text=Nichos+Naturais" alt="Nichos com Materiais Naturais">
+                    <span>D. Nichos e prateleiras naturais</span>
+                </button>
+                <button class="option-btn" data-style="geometrico">
+                    <img src="https://via.placeholder.com/150x100/FF9800/FFFFFF?text=Design+Modular" alt="Sistema Modular">
+                    <span>E. Módulos e nichos variados</span>
+                </button>
+            </div>
+            <div class="navigation">
+                <button onclick="previousQuestion(5)" class="btn-secondary">Voltar</button>
+                <button id="next5" onclick="nextQuestion(5)" disabled>Ver Resultado</button>
+            </div>
+        </div>
+        
+        <div id="generatingAI" class="quiz-screen">
+            <h2>Gerando sua Sugestão de Estilo...</h2>
+            <div class="loader"></div> 
+            <p>Combinando suas escolhas para criar uma visualização única. Aguarde um momento!</p>
+        </div>
+
+        <div id="resultScreen" class="quiz-screen">
+            <h2>Seu Estilo de Marcenaria é:</h2>
+            <h3 id="finalStyleName"></h3>
+            <p id="finalStyleDescription"></p>
+            <img id="finalStyleImageAI" src="" alt="Seu Estilo Gerado por IA" style="max-width: 90%; height: auto; border-radius: 8px; margin-top: 20px;">
+            <p>Esta é uma sugestão de como seu móvel pode ficar com o estilo que mais combina com você!</p>
+            <button onclick="showAmbientesSelection()">Quero um projeto com minhas medidas e especificações!</button>
+            <button onclick="restartQuiz()" class="btn-secondary">Fazer o teste novamente</button>
+        </div>
+
+        <!-- Seleção de Ambientes -->
+        <div id="ambientesSelection" class="quiz-screen">
+            <h2>Selecione os ambientes que deseja projetar</h2>
+            <p>Escolha um ou mais ambientes para receber um projeto personalizado</p>
+            
+            <div class="ambientes-grid">
+                <div class="ambiente-btn" data-ambiente="cozinha" data-preco="299">
+                    Cozinha
+                </div>
+                <div class="ambiente-btn" data-ambiente="sala" data-preco="249">
+                    Sala
+                </div>
+                <div class="ambiente-btn" data-ambiente="quarto" data-preco="279">
+                    Quarto
+                </div>
+                <div class="ambiente-btn" data-ambiente="banheiro" data-preco="199">
+                    Banheiro
+                </div>
+                <div class="ambiente-btn" data-ambiente="escritorio" data-preco="229">
+                    Escritório
+                </div>
+                <div class="ambiente-btn" data-ambiente="area-externa" data-preco="349">
+                    Área Externa
+                </div>
+            </div>
+            
+            <div id="resumoPedido" class="resumo-pedido">
+                <!-- Conteúdo gerado dinamicamente pelo JavaScript -->
+            </div>
+            
+            <div class="checkbox-termos">
+                <input type="checkbox" id="termos" name="termos" required>
+                <label for="termos">Concordo com os termos e condições e autorizo o contato para desenvolvimento do projeto</label>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="showScreen('resultScreen')" class="btn-secondary">Voltar</button>
+                <button id="btnContinuar" onclick="showContactForm()" disabled>Continuar para Formulário</button>
+            </div>
+        </div>
+
+        <!-- Formulário de Contato -->
+        <div id="contactForm" class="quiz-screen">
+            <h2>Vamos Tirar Seu Projeto do Papel!</h2>
+            <p>Seu estilo recomendado: <strong id="selectedStyleForForm"></strong></p>
+            <p>Ambientes selecionados: <strong id="selectedAmbientesForForm"></strong></p>
+            <p>Agora, envie suas informações e detalhes para criarmos um projeto <strong>personalizado com suas medidas e especificações.</strong></p>
+            
+            <form id="renderRequestForm">
+                <label for="name">Nome Completo:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="whatsapp">WhatsApp (com DDD):</label>
+                <input type="tel" id="whatsapp" name="whatsapp" placeholder="(XX) XXXXX-XXXX" required>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="upload">Envie sua planta, croqui ou fotos do ambiente (até 3):</label>
+                <input type="file" id="upload" name="upload[]" multiple accept="image/*,.pdf">
+
+                <label for="details">Detalhes adicionais e especificações de medidas:</label>
+                <textarea id="details" name="details" rows="4" placeholder="Ex: Quero uma cozinha de 3x2m com bancada em L, cor cinza claro, espaço para fogão de 4 bocas, etc."></textarea>
+                
+                <button type="submit">Enviar Detalhes e Gerar Links de Pagamento</button>
+            </form>
+            <p class="small-text">Você será redirecionado para a página de pagamento após o envio.</p>
+        </div>
+
+        <!-- Página de Agradecimento e Links de Pagamento -->
+        <div id="thankYouPage" class="quiz-screen agradecimento">
+            <h2>Obrigado pelo seu interesse!</h2>
+            <p>Seus dados foram recebidos com sucesso. Agora selecione a forma de pagamento para o seu projeto:</p>
+            
+            <div class="links-pagamento" id="paymentLinks">
+                <!-- Links gerados dinamicamente -->
+            </div>
+            
+            <p class="small-text">Após o pagamento, entraremos em contato em até 24h para dar andamento ao seu projeto.</p>
+            <button onclick="restartQuiz()" class="btn-secondary">Voltar ao Início</button>
+        </div>
+
+        <div class="footer">
+            <p><strong>SUA MARCA</strong> - Marcenaria Inteligente</p>
+            <p>Contato: (XX) XXXXX-XXXX | email@suamarca.com</p>
+            <p>© 2023 Todos os direitos reservados</p>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        const scores = {
+            escandinavo: 0,
+            industrial: 0,
+            laca: 0,
+            rustico: 0,
+            geometrico: 0
+        };
+
+        const styleDetails = {
+            escandinavo: {
+                name: "Escandinavo Leve 🌿", 
+                description: "Foco total em madeira clara e linhas simples. Limpo e arejado.",
+                mockup_image: "https://via.placeholder.com/400x300/BBDEFB/333333?text=Estilo+Escandinavo"
+            },
+            industrial: {
+                name: "Industrial Urbano 🧱", 
+                description: "Design com personalidade: metal preto e texturas de cimento e tons escuros.",
+                mockup_image: "https://via.placeholder.com/400x300/78909C/FFFFFF?text=Estilo+Industrial"
+            },
+            laca: {
+                name: "Contemporâneo Laca 🎨", 
+                description: "Elegância pura: acabamento liso e uniforme, sem puxadores visíveis.",
+                mockup_image: "https://via.placeholder.com/400x300/ECEFF1/333333?text=Estilo+Laca"
+            },
+            rustico: {
+                name: "Tropical Rústico ☀️", 
+                description: "Ambiente caloroso com madeira robusta e tons terrosos.",
+                mockup_image: "https://via.placeholder.com/400x300/8D6E63/FFFFFF?text=Estilo+Rústico"
+            },
+            geometrico: {
+                name: "Geométrico Moderno 💡", 
+                description: "Foco em dinamismo, funcionalidade e blocos de cor vibrantes.",
+                mockup_image: "https://via.placeholder.com/400x300/FF9800/FFFFFF?text=Estilo+Geométrico"
+            },
+            escandinavo_industrial: {
+                name: "Escandinavo-Industrial Chic", 
+                description: "A clareza escandinava combinada com a estrutura bruta e moderna do metal preto.",
+                mockup_image: "https://via.placeholder.com/400x300/90A4AE/FFFFFF?text=Híbrido+Escand+Industrial"
+            },
+            industrial_rustico: {
+                name: "Rústico-Industrial Aconchegante", 
+                description: "Traz o toque acolhedor da madeira rústica para a estética urbana do cimento queimado.",
+                mockup_image: "https://via.placeholder.com/400x300/8D6E63/FFFFFF?text=Híbrido+Ind+Rústico"
+            }
+        };
+
+        let currentQuestion = 0;
+        const totalQuestions = 5;
+        let selectedAmbientes = [];
+        let selectedStyle = "";
+
+        // Funções de Gerenciamento de Telas
+        function showScreen(id) {
+            document.querySelectorAll('.quiz-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+            
+            // Atualizar informações se necessário
+            if (id === 'contactForm') {
+                document.getElementById('selectedStyleForForm').textContent = selectedStyle;
+                document.getElementById('selectedAmbientesForForm').textContent = selectedAmbientes.join(', ');
+            }
+        }
+
+        function startQuiz() {
+            showScreen('question1');
+            currentQuestion = 1;
+        }
+
+        function previousQuestion(current) {
+            if (current > 1) {
+                const prev = current - 1;
+                currentQuestion = prev;
+                showScreen(`question${prev}`);
+            } else {
+                currentQuestion = 0;
+                showScreen('welcomeScreen');
+            }
+        }
+
+        function nextQuestion(current) {
+            if (current < totalQuestions) {
+                const next = current + 1;
+                currentQuestion = next;
+                showScreen(`question${next}`);
+            } else {
+                // fim do quiz
+                currentQuestion = totalQuestions;
+                showScreen('generatingAI');
+                generateHybridResult();
+            }
+        }
+
+        async function selectOption(button) {
+            const styleKey = button.dataset.style;
+            // Protege caso a chave não exista
+            if (scores.hasOwnProperty(styleKey)) scores[styleKey]++;
+
+            // Marca seleção visual dentro do grid atual
+            const currentOptions = button.closest('.options-grid').querySelectorAll('.option-btn');
+            currentOptions.forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+
+            // Detecta a tela atual (ex: question1) e habilita o botão next correspondente
+            const screen = button.closest('.quiz-screen');
+            if (screen) {
+                const match = screen.id.match(/question(\d+)/);
+                if (match) {
+                    const qNum = parseInt(match[1], 10);
+                    // Atualiza currentQuestion para manter estado consistente
+                    currentQuestion = qNum;
+                    const nextButton = document.getElementById(`next${qNum}`);
+                    if (nextButton) nextButton.disabled = false;
+                }
+            }
+        }
+
+        // Adiciona event listeners para os botões de opção
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', () => selectOption(button));
+        });
+
+        // Lógica de Estilos Híbridos
+        async function generateHybridResult() {
+            // 1. Encontra o Vencedor e o Vice-Vencedor
+            const sortedScores = Object.entries(scores)
+                .sort(([, scoreA], [, scoreB]) => scoreB - scoreA); 
+
+            const winnerKey = sortedScores[0][0]; 
+            const runnerUpKey = sortedScores[1][0]; 
+            
+            const scoreDifference = sortedScores[0][1] - sortedScores[1][1]; 
+
+            let finalStyleKey;
+
+            // Se a diferença for grande (>= 2 pontos) ou o vice não pontuou, usa o vencedor puro.
+            if (scoreDifference >= 2 || sortedScores[1][1] === 0) {
+                finalStyleKey = winnerKey;
+            } else {
+                // Tenta formar a chave híbrida (Ex: 'escandinavo_industrial')
+                const possibleHybridKey = `${winnerKey}_${runnerUpKey}`;
+
+                // Verifica se a combinação híbrida existe no styleDetails
+                if (styleDetails[possibleHybridKey]) {
+                    finalStyleKey = possibleHybridKey;
+                } else {
+                    // Se não tivermos um mockup para essa combinação, usa o vencedor puro
+                    finalStyleKey = winnerKey;
+                }
+            }
+
+            const result = styleDetails[finalStyleKey];
+            selectedStyle = result.name;
+            
+            // Define o caminho da imagem de mockup
+            const imageUrl = result.mockup_image; 
+            
+            // Simula um atraso (1.5 segundos)
+            await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+            // 2. Atualiza a tela de resultado
+            document.getElementById('finalStyleName').textContent = result.name;
+            document.getElementById('finalStyleDescription').textContent = result.description;
+            document.getElementById('finalStyleImageAI').src = imageUrl;
+            document.getElementById('finalStyleImageAI').alt = `Sugestão de Estilo ${result.name}`;
+            
+            // 3. Mostra o resultado
+            showScreen('resultScreen');
+        }
+
+        // Seleção de Ambientes
+        let ambientesListenersAdded = false;
+        function showAmbientesSelection() {
+            showScreen('ambientesSelection');
+            
+            // Adicionar event listeners para os botões de ambiente (apenas uma vez)
+            if (!ambientesListenersAdded) {
+                document.querySelectorAll('.ambiente-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                        updateResumoPedido();
+                    });
+                });
+                ambientesListenersAdded = true;
+            }
+        }
+
+        function updateResumoPedido() {
+            const ambientesSelecionados = document.querySelectorAll('.ambiente-btn.selected');
+            selectedAmbientes = [];
+            let total = 0;
+            
+            ambientesSelecionados.forEach(ambiente => {
+                const nome = ambiente.textContent.trim();
+                const preco = parseInt(ambiente.dataset.preco);
+                selectedAmbientes.push(nome);
+                total += preco;
+            });
+            
+            const resumoPedido = document.getElementById('resumoPedido');
+            const btnContinuar = document.getElementById('btnContinuar');
+            const termosCheckbox = document.getElementById('termos');
+            
+            if (ambientesSelecionados.length > 0) {
+                resumoPedido.classList.add('visible');
+                
+                // Calcular desconto progressivo
+                let desconto = 0;
+                if (ambientesSelecionados.length === 2) desconto = 0.10;
+                else if (ambientesSelecionados.length === 3) desconto = 0.15;
+                else if (ambientesSelecionados.length === 4) desconto = 0.20;
+                else if (ambientesSelecionados.length === 5) desconto = 0.25;
+                else if (ambientesSelecionados.length >= 6) desconto = 0.30;
+                
+                const totalComDesconto = total * (1 - desconto);
+                const economia = total - totalComDesconto;
+                
+                let html = `<h3>Resumo do Pedido</h3>`;
+                html += `<p><strong>${ambientesSelecionados.length} ambiente(s) selecionado(s):</strong></p>`;
+                
+                ambientesSelecionados.forEach(ambiente => {
+                    const nome = ambiente.textContent.trim();
+                    const preco = parseInt(ambiente.dataset.preco);
+                    html += `<p>• ${nome} - R$ ${preco}</p>`;
+                });
+                
+                html += `<hr>`;
+                html += `<p class="preco-original">Total: R$ ${total}</p>`;
+                html += `<p class="preco-promocional">PROMOÇÃO: R$ ${totalComDesconto.toFixed(2)}</p>`;
+                html += `<p class="economia">Você economiza: R$ ${economia.toFixed(2)} (${(desconto * 100).toFixed(0)}% OFF)</p>`;
+                
+                resumoPedido.innerHTML = html;
+                
+                // Habilitar/desabilitar botão continuar baseado nos termos
+                btnContinuar.disabled = !termosCheckbox.checked;
+            } else {
+                resumoPedido.classList.remove('visible');
+                btnContinuar.disabled = true;
+            }
+        }
+
+        // Event listener para checkbox de termos
+        document.getElementById('termos').addEventListener('change', function() {
+            const btnContinuar = document.getElementById('btnContinuar');
+            const ambientesSelecionados = document.querySelectorAll('.ambiente-btn.selected').length;
+            
+            btnContinuar.disabled = !(this.checked && ambientesSelecionados > 0);
+        });
+
+        function showContactForm() {
+            showScreen('contactForm');
+        }
+
+        // Geração de Links de Pagamento
+        function generatePaymentLinks() {
+            const ambientesSelecionados = document.querySelectorAll('.ambiente-btn.selected');
+            let total = 0;
+            let linksHTML = '';
+            
+            // Calcular totais
+            ambientesSelecionados.forEach(ambiente => {
+                total += parseInt(ambiente.dataset.preco);
+            });
+            
+            // Calcular desconto progressivo
+            let desconto = 0;
+            if (ambientesSelecionados.length === 2) desconto = 0.10;
+            else if (ambientesSelecionados.length === 3) desconto = 0.15;
+            else if (ambientesSelecionados.length === 4) desconto = 0.20;
+            else if (ambientesSelecionados.length === 5) desconto = 0.25;
+            else if (ambientesSelecionados.length >= 6) desconto = 0.30;
+            
+            const totalComDesconto = total * (1 - desconto);
+            
+            // Link individual para cada ambiente
+            ambientesSelecionados.forEach(ambiente => {
+                const nome = ambiente.textContent.trim();
+                const preco = parseInt(ambiente.dataset.preco);
+                
+                linksHTML += `
+                    <div class="link-pagamento">
+                        <h3>${nome}</h3>
+                        <p>Projeto personalizado para ${nome}</p>
+                        <div class="preco">R$ ${preco}</div>
+                        <button onclick="simularPagamento('${nome}', ${preco})">Pagar com Mercado Pago</button>
+                    </div>
+                `;
+            });
+            
+            // Link para pacote completo (se mais de um ambiente)
+            if (ambientesSelecionados.length > 1) {
+                linksHTML += `
+                    <div class="link-pagamento" style="border: 2px solid var(--laranja);">
+                        <h3>Pacote Completo</h3>
+                        <p>Todos os ambientes selecionados</p>
+                        <p class="preco-original">De: R$ ${total}</p>
+                        <div class="preco">R$ ${totalComDesconto.toFixed(2)}</div>
+                        <div class="desconto">${(desconto * 100).toFixed(0)}% DE DESCONTO</div>
+                        <button onclick="simularPagamento('Pacote Completo', ${totalComDesconto})">Pagar com Mercado Pago</button>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('paymentLinks').innerHTML = linksHTML;
+        }
+
+        function simularPagamento(produto, valor) {
+            alert(`SIMULAÇÃO: Você seria redirecionado para o Mercado Pago\n\nProduto: ${produto}\nValor: R$ ${valor.toFixed(2)}`);
+            // Em produção, aqui seria: window.location.href = "LINK_DO_MERCADO_PAGO";
+        }
+
+        // ===============================
+//  ENVIO REAL PARA A NETLIFY FUNCTION / RESEND
+// ===============================
+
+// Converter arquivo para base64
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64 = reader.result.split(",")[1];
+            resolve({
+                filename: file.name,
+                contentType: file.type,
+                base64
+            });
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Capturar envio do formulário REAL
+document.getElementById('renderRequestForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const files = document.getElementById('upload').files;
+
+    // Limite de 5 arquivos
+    if (files.length > 5) {
+        alert("Você pode enviar no máximo 5 arquivos.");
+        return;
+    }
+
+    // Coleta básica
+    const name = document.getElementById("name").value;
+    const whatsapp = document.getElementById("whatsapp").value;
+    const email = document.getElementById("email").value;
+    const details = document.getElementById("details").value;
+
+    // Montar respostas do quiz (formato B)
+    const respostasQuiz = [
+        { question: "Qual puxador te chama mais atenção?", answer: getAnswerText(1) },
+        { question: "Qual textura de painel você mais gosta?", answer: getAnswerText(2) },
+        { question: "Que tipo de prateleira você escolheria?", answer: getAnswerText(3) },
+        { question: "Qual ambiente de cores te inspira mais?", answer: getAnswerText(4) },
+        { question: "Como você prefere organizar seus objetos?", answer: getAnswerText(5) }
+    ];
+
+    function getAnswerText(n) {
+        const q = document.getElementById(`question${n}`);
+        const sel = q.querySelector(".option-btn.selected span");
+        return sel ? sel.textContent.trim() : "-";
+    }
+
+    // Converter anexos
+    const attachments = [];
+    for (let file of files) {
+        attachments.push(await fileToBase64(file));
+    }
+
+    // Montar payload
+    const payload = {
+        name,
+        whatsapp,
+        email,
+        details,
+        estilo: selectedStyle,
+        ambientes: selectedAmbientes,
+        respostas_quiz: respostasQuiz,
+        attachments
+    };
+
+    // Enviar para Netlify Function
+    const res = await fetch("/.netlify/functions/sendEmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+        alert("Erro ao enviar. Tente novamente.");
+        return;
+    }
+
+    // Depois que os dados foram enviados
+    generatePaymentLinks();
+    showScreen("thankYouPage");
+});
+
+        function restartQuiz() {
+            // Resetar scores
+            for (const style in scores) {
+                scores[style] = 0;
+            }
+            
+            // Resetar seleções
+            currentQuestion = 0;
+            selectedAmbientes = [];
+            selectedStyle = "";
+            
+            // Resetar UI
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.ambiente-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('resumoPedido').classList.remove('visible');
+            document.getElementById('termos').checked = false;
+            
+            // Resetar botões de próximo
+            for (let i = 1; i <= 5; i++) {
+                const nextButton = document.getElementById(`next${i}`);
+                if (nextButton) {
+                    nextButton.disabled = true;
+                }
+            }
+            
+            // Voltar para o início
+            showScreen('welcomeScreen');
+        }
+    </script>
+</body>
+</html>
